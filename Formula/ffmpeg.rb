@@ -188,18 +188,26 @@ class Ffmpeg < Formula
     args << "--enable-libopenh264" if build.with? "openh264"
     args << "--enable-libopenjpeg" if build.with? "openjpeg"
     args << "--enable-libopenmpt" if build.with? "libopenmpt"
-    args << "--enable-libtorch" if build.with? "pytorch"
+    
     ########################################
     ### libtorch / pytorch is work in progress...
     # In homebrew-core, the libtorch formula was renamed to pytorch.
-    # This patch currently fails to build, throwing the error "ERROR: libtorch not found"
-    # - Maybe it needs compiler flags, as per https://ayosec.github.io/ffmpeg-filters-docs/7.1/Filters/Video/dnn_processing.html
-      # if build.with? "pytorch"
-      #     args << "--enable-libtorch"
-      #     args << "--extra-cflags=-I#{HOMEBREW_PREFIX}/include/torch/csrc/api/include"
-      # end
+    # Reference: https://ayosec.github.io/ffmpeg-filters-docs/7.1/Filters/Video/dnn_processing.html
+    # pytorch is now 2.5.0 https://github.com/pytorch/pytorch/releases/tag/v2.5.0 while at the time of writing, `$ brew info pytorch` is 2.4.1
     # - If anyone stumbles across this work-in-progress branch, feel free to correct my errors.
+    # pytorch appears to be BSD-3-Clause License https://github.com/pytorch/pytorch/blob/main/LICENSE
     ########################################
+    # args << "--enable-libtorch" if build.with? "pytorch"
+    if build.with? "pytorch"
+      args << "--enable-libtorch"
+      # This extra cflags path seems to have helped "ERROR: libtorch not found"
+      args << "--extra-cflags=-I#{HOMEBREW_PREFIX}/include/torch/csrc/api/include"
+      # but now errors with "make: *** [libavfilter/dnn/dnn_backend_torch.o] Error 1"
+      # ./version:1:1: error: expected unqualified-id
+      # 7.1
+      # ^
+    end
+    
     args << "--enable-librav1e" if build.with? "rav1e"
     args << "--enable-libsvtav1" if build.with? "svt-av1"
     args << "--enable-librist" if build.with? "librist"
