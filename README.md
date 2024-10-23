@@ -131,6 +131,7 @@ This formula features the following libraries optionally:
 | `openjpeg`       | JPEG 2000 image format                                    |
 | `openssl`        | SSL support                                               |
 | `openvino`       | OpenVINO for Deep Neural Network based filters            |
+| `pytorch`        | PyTorch for Deep Neural Network based filters             |
 | `rav1e`          | AV1 encoding                                              |
 | `svt-av1`        | Scalable Video Technology for AV1 (encoder and decoder)   |
 | `rtmpdump`       | Dumping RTMP strea s                                      |
