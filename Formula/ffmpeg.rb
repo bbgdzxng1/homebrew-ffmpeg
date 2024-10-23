@@ -31,6 +31,7 @@ class Ffmpeg < Formula
   option "with-openjpeg", "Enable JPEG 2000 image format"
   option "with-openssl", "Enable SSL support"
   option "with-openvino", "Enable OpenVINO as a module backend for DNN-based filters"
+  option "with-PyTorch", "Enable PyTorch as a module backend for DNN-based filters"
   option "with-rav1e", "Enable AV1 encoding via librav1e"
   option "with-svt-av1", "Enable Scalable Video Technology for AV1"
   option "with-rtmpdump", "Enable RTMP dumping support"
@@ -95,6 +96,7 @@ class Ffmpeg < Formula
   depends_on "openjpeg" => :optional
   depends_on "openssl" => :optional
   depends_on "openvino" => :optional
+  depends_on "pytorch" => :optional
   depends_on "rav1e" => :optional
   depends_on "rtmpdump" => :optional
   depends_on "rubberband" => :optional
@@ -186,6 +188,18 @@ class Ffmpeg < Formula
     args << "--enable-libopenh264" if build.with? "openh264"
     args << "--enable-libopenjpeg" if build.with? "openjpeg"
     args << "--enable-libopenmpt" if build.with? "libopenmpt"
+    args << "--enable-libtorch" if build.with? "pytorch"
+    ########################################
+    ### libtorch / pytorch is work in progress...
+    # In homebrew-core, the libtorch formula was renamed to pytorch.
+    # This patch currently fails to build, throwing the error "ERROR: libtorch not found"
+    # - Maybe it needs compiler flags, as per https://ayosec.github.io/ffmpeg-filters-docs/7.1/Filters/Video/dnn_processing.html
+      # if build.with? "pytorch"
+      #     args << "--enable-libtorch"
+      #     args << "--extra-cflags=-I#{HOMEBREW_PREFIX}/include/torch/csrc/api/include"
+      # end
+    # - If anyone stumbles across this work-in-progress branch, feel free to correct my errors.
+    ########################################
     args << "--enable-librav1e" if build.with? "rav1e"
     args << "--enable-libsvtav1" if build.with? "svt-av1"
     args << "--enable-librist" if build.with? "librist"
